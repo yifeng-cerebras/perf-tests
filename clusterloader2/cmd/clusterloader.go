@@ -317,7 +317,7 @@ func main() {
 		klog.Exitf("Framework creation error: %v", err)
 	}
 
-	var prometheusController *prometheus.Controller
+	//var prometheusController *prometheus.Controller
 	var prometheusFramework *framework.Framework
 	var testReporter test.Reporter
 
