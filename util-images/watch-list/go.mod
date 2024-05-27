@@ -1,6 +1,8 @@
 module k8s.io/perf-tests/watch-list
 
-go 1.20
+go 1.21
+
+toolchain go1.22.0
 
 require (
 	k8s.io/apimachinery v0.29.3

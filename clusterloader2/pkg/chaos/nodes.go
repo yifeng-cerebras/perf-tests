@@ -34,12 +34,13 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
+
 	"k8s.io/perf-tests/clusterloader2/pkg/provider"
 )
 
 const (
-	monitoringNamespace = "monitoring"
-	prometheusLabel     = "prometheus=k8s"
+	monitoringNamespace = "prometheus"
+	prometheusLabel     = "prometheus=prometheus-prometheus"
 )
 
 // NodeKiller is a utility to simulate node failures.

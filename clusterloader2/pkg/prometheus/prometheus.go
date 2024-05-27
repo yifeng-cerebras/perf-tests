@@ -35,6 +35,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
+
 	"k8s.io/perf-tests/clusterloader2/pkg/config"
 	clerrors "k8s.io/perf-tests/clusterloader2/pkg/errors"
 	"k8s.io/perf-tests/clusterloader2/pkg/flags"
@@ -45,7 +46,7 @@ import (
 )
 
 const (
-	namespace                    = "monitoring"
+	namespace                    = "prometheus"
 	storageClass                 = "ssd"
 	checkPrometheusReadyInterval = 30 * time.Second
 	numK8sClients                = 1
@@ -485,7 +486,7 @@ func (pc *Controller) isKubemark() bool {
 
 func dumpAdditionalLogsOnPrometheusSetupFailure(k8sClient kubernetes.Interface) {
 	klog.V(2).Info("Dumping monitoring/prometheus-k8s events...")
-	list, err := client.ListEvents(k8sClient, namespace, "prometheus-k8s")
+	list, err := client.ListEvents(k8sClient, namespace, "prometheus-prometheus")
 	if err != nil {
 		klog.Warningf("Error while listing monitoring/prometheus-k8s events: %v", err)
 		return

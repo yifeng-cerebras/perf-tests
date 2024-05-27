@@ -20,6 +20,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
+	"regexp"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -27,8 +30,6 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/remotecommand"
-	"os"
-	"regexp"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
@@ -61,7 +62,7 @@ func CheckAllTargetsReady(k8sClient kubernetes.Interface, selector func(Target) 
 func CheckTargetsReady(k8sClient kubernetes.Interface, selector func(Target) bool, minActiveTargets, minReadyTargets int) (bool, error) {
 	raw, err := k8sClient.CoreV1().
 		Services(namespace).
-		ProxyGet("http", "prometheus-k8s", "9090", "api/v1/targets", nil /*params*/).
+		ProxyGet("http", "prometheus-prometheus", "9090", "api/v1/targets", nil /*params*/).
 		DoRaw(context.TODO())
 	if err != nil {
 		response := "(empty)"
@@ -118,7 +119,7 @@ func makeSnapshot(k8sClient kubernetes.Interface, config *restclient.Config, fil
 		Namespace(namespace).
 		Resource("services").
 		SubResource("proxy").
-		Name(net.JoinSchemeNamePort("http", "prometheus-k8s", "9090")).
+		Name(net.JoinSchemeNamePort("http", "prometheus-prometheus", "9090")).
 		Suffix("api/v1/admin/tsdb/snapshot").
 		DoRaw(context.TODO())
 	if err != nil {
@@ -132,7 +133,7 @@ func makeSnapshot(k8sClient kubernetes.Interface, config *restclient.Config, fil
 
 	klog.V(2).Infof("Snapshot made: %v", response)
 
-	svc, err := k8sClient.CoreV1().Services(namespace).Get(context.TODO(), "prometheus-k8s", metav1.GetOptions{})
+	svc, err := k8sClient.CoreV1().Services(namespace).Get(context.TODO(), "prometheus-prometheus", metav1.GetOptions{})
 	labelSelector := labels.Set(svc.Spec.Selector).AsSelector().String()
 	pods, err := k8sClient.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{LabelSelector: labelSelector})
 

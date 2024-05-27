@@ -34,8 +34,8 @@ func (icpc *inClusterPrometheusClient) Query(query string, queryTime time.Time) 
 		"time":  queryTime.Format(time.RFC3339),
 	}
 	return icpc.client.CoreV1().
-		Services("monitoring").
-		ProxyGet("http", "prometheus-k8s", "9090", "api/v1/query", params).
+		Services("prometheus").
+		ProxyGet("http", "prometheus-prometheus", "9090", "api/v1/query", params).
 		DoRaw(context.TODO())
 }
 
